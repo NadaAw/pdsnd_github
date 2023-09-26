@@ -17,5 +17,7 @@ _"new_york_city.csv"_ :Dataset containing all bikeshare information for the city
 ### **Credits**
 This link help me alot in solving the project _https://github.com/Aritra96/bikeshare-project/blob/master/bikeshare.py_
 
-
+### Requirements
+Language: Python 3.6 or above <br>
+Libraries: pandas, numpy, time
 
