@@ -71,36 +71,36 @@ def load_data(city, month, day):
         (str) month - name of the month to filter by, or "all" to apply no month filter
         (str) day - name of the day of week to filter by, or "all" to apply no day filter
     Returns:
-        frame - Pandas DataFrame containing city data filtered by month and day
+        df - Pandas Datadf containing city data filtered by month and day
     """
-    frame = pd.read_csv(CITY_DATA[city])
+    df = pd.read_csv(CITY_DATA[city])
 	# convert the Start Time column to datetime
-    frame['Start Time'] = pd.to_datetime(frame['Start Time'])
-    frame['End Time'] = pd.to_datetime(frame['End Time'])
+    df['Start Time'] = pd.to_datetime(df['Start Time'])
+    df['End Time'] = pd.to_datetime(df['End Time'])
 
     # Making a new hour column.
-    frame['Hour'] = frame['Start Time'].dt.hour
+    df['Hour'] = df['Start Time'].dt.hour
 
     # extract month and day of week from Start Time to create new columns
-    frame['month'] = frame['Start Time'].dt.month
-    frame['day_of_week'] = frame['Start Time'].dt.weekday_name
+    df['month'] = df['Start Time'].dt.month
+    df['day_of_week'] = df['Start Time'].dt.weekday_name
 
     # filter by month
     if month != 'none':
         # use the index of the months list to get the corresponding int
         months = ['january', 'febreuary', 'march', 'april', 'may', 'june']
         ind_mon = months.index(month) + 1
-        frame = frame[frame['month'] == ind_mon]
+        df = df[df['month'] == ind_mon]
 
     # filter by day of week if applicable
     if day != '':
-        # filter by day of week to create the new dataframe
-        frame = frame[frame['day_of_week'] == day.title()]
+        # filter by day of week to create the new datadf
+        df = df[df['day_of_week'] == day.title()]
 
-    return frame
+    return df
 
 
-def time_stats(frame,month,day):
+def time_stats(df,month,day):
     """Displays statistics on the most frequent times of travel."""
 
     print('\nCalculating The Most Frequent Times of Travel...\n')
@@ -108,81 +108,81 @@ def time_stats(frame,month,day):
 
     if month != 'none':
         # display the most common month
-        print('Most common month: ', frame['month'].value_counts().index[0])
+        print('Most common month: ', df['month'].value_counts().index[0])
     if day !='':
         # display the most common day of week
-        print('Most common day of week: ', frame['day_of_week'].value_counts().index[0])
+        print('Most common day of week: ', df['day_of_week'].value_counts().index[0])
 
         # display the most common start hour
-        print('Most common start hour: ',frame['Hour'].value_counts().index[0])
+        print('Most common start hour: ',df['Hour'].value_counts().index[0])
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
 
-def station_stats(frame):
+def station_stats(df):
     """Displays statistics on the most popular stations and trip."""
 
     print('\nCalculating The Most Popular Stations and Trip...\n')
     start_time = time.time()
 
     # TO DO: display most commonly used start station
-    print('Most common start station: ', frame['Start Station'].value_counts().index[0])
+    print('Most common start station: ', df['Start Station'].value_counts().index[0])
 
     # TO DO: display most commonly used end station
    
-    print('Most common end station: ', frame['End Station'].value_counts().index[0])
+    print('Most common end station: ', df['End Station'].value_counts().index[0])
 
     # TO DO: display most frequent combination of start station and end station trip
-    print(pd.DataFrame(frame.groupby(['Start Station','End Station']).size().sort_values(ascending=False)).iloc[0])
+    print(pd.Datadf(df.groupby(['Start Station','End Station']).size().sort_values(ascending=False)).iloc[0])
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
 
-def trip_duration_stats(frame):
+def trip_duration_stats(df):
     """Displays statistics on the total and average trip duration."""
 
     print('\nCalculating Trip Duration...\n')
     start_time = time.time()
 
     # TO DO: display total travel time
-    print('Total travel time: ', frame['Trip Duration'].sum())
+    print('Total travel time: ', df['Trip Duration'].sum())
 
     # TO DO: display mean travel time
-    print('Total travel time: ', frame['Trip Duration'].mean())
+    print('Total travel time: ', df['Trip Duration'].mean())
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
 
-def user_stats(frame,city):
+def user_stats(df,city):
     """Displays statistics on bikeshare users."""
 
     print('\nCalculating User Stats...\n')
     start_time = time.time()
 
     # TO DO: Display counts of user types
-    print("Counts of user Types: ",frame['User Type'].value_counts())
+    print("Counts of user Types: ",df['User Type'].value_counts())
     # TO DO: Display counts of gender
     if(city == 'Chicago'.casefold() or city == 'New york'.casefold()):
-           print('Counts of gender: ', frame['Gender'].value_counts())
+           print('Counts of gender: ', df['Gender'].value_counts())
            # TO DO: Display earliest, most recent, and most common year of birth
-           print('Most earliest year of birth: ', frame['Birth Year'].sort_values().iloc[0])
-           print('Most recent year of birth: ', frame['Birth Year'].sort_values(ascending = False).iloc[0])
-           print('Most common year of birth', frame['Birth Year'].value_counts().index[0])
+           print('Most earliest year of birth: ', df['Birth Year'].sort_values().iloc[0])
+           print('Most recent year of birth: ', df['Birth Year'].sort_values(ascending = False).iloc[0])
+           print('Most common year of birth', df['Birth Year'].value_counts().index[0])
 
 
     print("\nThis took %s seconds." % (time.time() - start_time))
     print('-'*40)
 
-#Function to display the data frame itself as per user request
-def display_data(frame):
+#Function to display the data df itself as per user request
+def display_data(df):
     """Displays 5 rows of data from the csv file for the selected city.
 
     Args:
-        param1 (frame): The data frame you wish to work with.
+        param1 (df): The data df you wish to work with.
 
     Returns:
         None.
@@ -196,9 +196,9 @@ def display_data(frame):
         print("\nDo you wish to view the raw data?")
         print("\nAccepted responses:\nYes or yes\nNo or no")
         rdata = input().lower()
-        #the raw data from the frame is displayed if user opts for it
+        #the raw data from the df is displayed if user opts for it
         if rdata == "yes":
-            print(frame.head())
+            print(df.head())
         elif rdata not in BIN_RESPONSE_LIST:
             print("\nPlease check your input.")
             print("Input does not seem to match any of the accepted responses.")
@@ -211,7 +211,7 @@ def display_data(frame):
         rdata = input().lower()
         #If user opts for it, this displays next 5 rows of data
         if rdata == "yes":
-             print(frame[counter:counter+5])
+             print(df[counter:counter+5])
         elif rdata != "yes":
              break
 
@@ -221,14 +221,14 @@ def display_data(frame):
 def main():
     while True:
         city, month, day = get_filters()
-        frame = load_data(city, month, day)
+        df = load_data(city, month, day)
 
 
-        time_stats(frame,month,day)
-        station_stats(frame)
-        trip_duration_stats(frame)
-        user_stats(frame, city)
-        display_data(frame)
+        time_stats(df,month,day)
+        station_stats(df)
+        trip_duration_stats(df)
+        user_stats(df, city)
+        display_data(df)
 
         restart = input('\nWould you like to restart? Enter yes or no.\n')
         if restart.casefold() not in 'yes':
